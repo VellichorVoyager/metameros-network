@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getVersion, getRouterHost } from "@/lib/router-api"
+import { getVersion, getRouterHost, RouterRequestError } from "@/lib/router-api"
 
 export async function GET() {
   const routerHost = getRouterHost()
@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ status: "online", host: routerHost })
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error"
-    const isTimeout = errorMessage.includes("timeout")
+    const isTimeout = error instanceof RouterRequestError && error.code === "TIMEOUT"
 
     return NextResponse.json({
       status: "offline",

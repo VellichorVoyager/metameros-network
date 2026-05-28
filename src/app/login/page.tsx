@@ -58,9 +58,7 @@ export default function LoginPage() {
       if (data.success) {
         resetAuthPollingState()
 
-        const normalizedRouterHost = data.routerHost
-          ? canonicalizeRouterHost(data.routerHost)
-          : canonicalizeRouterHost(routerHost)
+        const normalizedRouterHost = canonicalizeRouterHost(data.routerHost || routerHost)
         setRouterHost(normalizedRouterHost)
         localStorage.setItem("router_ip", normalizedRouterHost)
 

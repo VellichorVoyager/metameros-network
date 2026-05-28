@@ -11,9 +11,39 @@ const ROUTER_HOST_POLICY_ERROR =
   "Router host is not allowed by the current gateway host policy"
 
 export async function POST(request: Request) {
+  let body: unknown
   try {
-    const { username, password, routerHost } = await request.json()
-    const requestedRouterHost = routerHost || DEFAULT_ROUTER_HOST
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 })
+  }
+
+  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+    return NextResponse.json({ success: false, error: "Invalid JSON" }, { status: 400 })
+  }
+
+  const { username, password, routerHost } = body as {
+    username?: unknown
+    password?: unknown
+    routerHost?: unknown
+  }
+
+  if (
+    typeof username !== "string" ||
+    typeof password !== "string" ||
+    !username.trim() ||
+    !password.trim()
+  ) {
+    return NextResponse.json(
+      { success: false, error: "Username and password are required" },
+      { status: 400 }
+    )
+  }
+
+  const requestedRouterHost =
+    typeof routerHost === "string" && routerHost.trim() ? routerHost : DEFAULT_ROUTER_HOST
+
+  try {
     const normalizedRouterHost = normalizeRouterHost(requestedRouterHost)
 
     const data = await loginRouter(username, password, normalizedRouterHost)

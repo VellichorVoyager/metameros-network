@@ -31,6 +31,7 @@ export const toEffectiveCookieSecure = (
 export const toWriteActionsEnabled = (value: string | undefined, fallback: boolean): boolean =>
   toBoolean(value, fallback)
 
+// TODO: Split this module into client/server config modules in a follow-up PR.
 export const REQUEST_TIMEOUT_MS = toNumber(process.env.REQUEST_TIMEOUT_MS, 5000)
 
 export const POLL_INTERVAL_FAST = toNumber(process.env.NEXT_PUBLIC_POLL_INTERVAL_FAST, 5000)
