@@ -9,8 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshControl } from "@/components/refresh-control"
-import { useApConfig } from "@/hooks/use-router-data"
-import { ENABLE_WRITE_ACTIONS } from "@/lib/config"
+import { useApConfig, useRouterCapabilities } from "@/hooks/use-router-data"
 import { Wifi, Eye, EyeOff, Save, Radio, Shield, Antenna, AlertCircle } from "lucide-react"
 
 interface LocalConfig {
@@ -31,7 +30,8 @@ interface LocalConfig {
 }
 
 export default function WifiPage() {
-  const writeActionsDisabled = !ENABLE_WRITE_ACTIONS
+  const { data: capabilities } = useRouterCapabilities()
+  const writeActionsDisabled = !capabilities?.writeActionsEnabled
   const { data, isLoading, mutate } = useApConfig()
   const [showPassword, setShowPassword] = useState(false)
   const [saving, setSaving] = useState(false)

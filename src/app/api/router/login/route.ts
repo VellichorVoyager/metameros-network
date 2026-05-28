@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { COOKIE_SAMESITE, COOKIE_SECURE } from "@/lib/config"
+import { COOKIE_SAMESITE, EFFECTIVE_COOKIE_SECURE } from "@/lib/config"
 import { loginRouter, normalizeRouterHost, RouterRequestError } from "@/lib/router-api"
 
 const DEFAULT_ROUTER_IP = "192.168.12.1"
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
       cookies().set("auth_token", data.auth.token, {
         httpOnly: true,
-        secure: COOKIE_SECURE,
+        secure: EFFECTIVE_COOKIE_SECURE,
         sameSite: COOKIE_SAMESITE,
         maxAge: tokenMaxAge,
         path: "/",
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
       cookies().set("router_ip", normalizedRouterHost, {
         httpOnly: true,
-        secure: COOKIE_SECURE,
+        secure: EFFECTIVE_COOKIE_SECURE,
         sameSite: COOKIE_SAMESITE,
         maxAge: 60 * 60 * 24 * 30, // 30 days
         path: "/",

@@ -8,6 +8,9 @@ const INVALID_ROUTER_HOST_ERROR = "Invalid router IP or hostname"
 export function isValidIpv4(value: string): boolean {
   const parts = value.split(".")
   return parts.length === 4 && parts.every((part) => {
+    if (part.length > 1 && part.startsWith("0")) {
+      return false
+    }
     const num = Number(part)
     return Number.isInteger(num) && num >= 0 && num <= 255
   })
@@ -23,7 +26,7 @@ export function canonicalizeRouterHost(value: string): string {
     if (!isValidIpv4(trimmed)) {
       throw new Error(INVALID_ROUTER_HOST_ERROR)
     }
-    return trimmed
+    return trimmed.split(".").map((part) => String(Number(part))).join(".")
   }
 
   if (!HOSTNAME_PATTERN.test(trimmed)) {
@@ -78,7 +81,7 @@ export function parseGatewayAllowedHosts(value: string | undefined): Set<string>
     try {
       allowedHosts.add(canonicalizeRouterHost(trimmedHost))
     } catch {
-      // Ignore invalid entries so config remains fail-closed.
+      console.warn(`[router-host] Ignoring invalid GATEWAY_ALLOWED_HOSTS entry: "${trimmedHost}"`)
     }
   }
   return allowedHosts

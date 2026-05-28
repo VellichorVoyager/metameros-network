@@ -76,6 +76,17 @@ export interface GatewayHealthStatus {
   message?: string
 }
 
+export interface RouterCapabilities {
+  writeActionsEnabled: boolean
+}
+
+export function useRouterCapabilities() {
+  return useSWR<RouterCapabilities>("/api/router/capabilities", fetcher, {
+    revalidateOnFocus: NEXT_PUBLIC_REVALIDATE_ON_FOCUS,
+    shouldRetryOnError: false,
+  })
+}
+
 export function useGatewayHealth() {
   return useSWR<GatewayHealthStatus>("/api/router/health", fetcher, {
     refreshInterval: () => (shouldStopPolling ? 0 : POLL_INTERVAL_FAST),

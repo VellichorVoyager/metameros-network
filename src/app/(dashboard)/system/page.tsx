@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshControl } from "@/components/refresh-control"
-import { useGatewayInfo, useVersion } from "@/hooks/use-router-data"
-import { ENABLE_WRITE_ACTIONS } from "@/lib/config"
+import { useGatewayInfo, useRouterCapabilities, useVersion } from "@/hooks/use-router-data"
 import { formatUptime } from "@/lib/utils"
 import {
   Server,
@@ -18,7 +17,9 @@ import {
 
 export default function SystemPage() {
   const { data: gateway, isLoading, mutate } = useGatewayInfo()
+  const { data: capabilities } = useRouterCapabilities()
   const { data: versionData } = useVersion()
+  const writeActionsEnabled = !!capabilities?.writeActionsEnabled
   const [rebooting, setRebooting] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
 
@@ -189,13 +190,13 @@ export default function SystemPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {!ENABLE_WRITE_ACTIONS && (
+            {!writeActionsEnabled && (
               <p className="text-sm text-muted-foreground mb-4">
                 Read-only mode: write actions are disabled.
               </p>
             )}
             <div className="flex flex-wrap gap-4">
-              {!ENABLE_WRITE_ACTIONS ? null : !showConfirm ? (
+              {!writeActionsEnabled ? null : !showConfirm ? (
                 <Button
                   variant="destructive"
                   onClick={() => setShowConfirm(true)}

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { COOKIE_SAMESITE, COOKIE_SECURE } from "@/lib/config"
+import { COOKIE_SAMESITE, EFFECTIVE_COOKIE_SECURE } from "@/lib/config"
 
 export async function POST() {
   // Clear auth cookies by setting them to expire immediately
   cookies().set("auth_token", "", {
     httpOnly: true,
-    secure: COOKIE_SECURE,
+    secure: EFFECTIVE_COOKIE_SECURE,
     sameSite: COOKIE_SAMESITE,
     maxAge: 0,
     path: "/",
@@ -14,7 +14,7 @@ export async function POST() {
 
   cookies().set("router_ip", "", {
     httpOnly: true,
-    secure: COOKIE_SECURE,
+    secure: EFFECTIVE_COOKIE_SECURE,
     sameSite: COOKIE_SAMESITE,
     maxAge: 0,
     path: "/",

@@ -1,6 +1,6 @@
 import test from "node:test"
 import assert from "node:assert/strict"
-import { toBoolean, toSameSite } from "@/lib/config"
+import { toBoolean, toEffectiveCookieSecure, toSameSite, toWriteActionsEnabled } from "@/lib/config"
 
 test("toBoolean parses common true/false forms", () => {
   assert.equal(toBoolean("true", false), true)
@@ -20,4 +20,16 @@ test("toSameSite parses accepted values and defaults safely", () => {
   assert.equal(toSameSite("none", "strict"), "none")
   assert.equal(toSameSite("invalid", "strict"), "strict")
   assert.equal(toSameSite(undefined, "strict"), "strict")
+})
+
+test("toEffectiveCookieSecure enforces secure cookies when SameSite=None", () => {
+  assert.equal(toEffectiveCookieSecure(false, "strict"), false)
+  assert.equal(toEffectiveCookieSecure(false, "none"), true)
+  assert.equal(toEffectiveCookieSecure(true, "none"), true)
+})
+
+test("toWriteActionsEnabled uses only the authoritative server value", () => {
+  assert.equal(toWriteActionsEnabled("true", false), true)
+  assert.equal(toWriteActionsEnabled("false", true), false)
+  assert.equal(toWriteActionsEnabled(undefined, false), false)
 })
