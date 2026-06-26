@@ -1,0 +1,90 @@
+# Tailscale-attached deployment for the TMO-G5AR Portal.
+#
+# Runs a Tailscale sidecar and attaches the portal to its network namespace, so
+# the portal becomes its OWN node on your tailnet — reachable privately from any
+# of your Tailscale devices at:
+#
+#     http://g5ar-portal:3000          (if MagicDNS is on)
+#     http://<its-tailnet-100.x-IP>:3000
+#
+# Nothing is published to the public internet. The portal also stays reachable on
+# the LAN at http://<host-ip>:3000 (the port mapping lives on the sidecar because
+# the portal shares its network namespace).
+#
+# Setup:
+#   1. Create a Tailscale auth key (reusable, ideally with a tag/ACL) at
+#      https://login.tailscale.com/admin/settings/keys
+#   2. Add it to .env  (compose reads .env for ${...}; it is gitignored):
+#        TS_AUTHKEY=tskey-auth-xxxxxxxxxxxx
+#   3. docker compose -f docker-compose.tailscale.yml up -d --build
+#   4. Verify the node appears in your Tailscale admin console as "g5ar-portal".
+#
+# App config (Shodan key, gateway allowlist, cookie posture) still comes from the
+# gitignored .env.local via env_file on the portal service.
+#
+# HTTPS (optional): once this works over plain HTTP, you can switch to userspace
+# mode + `tailscale serve` to get https://g5ar-portal.<tailnet>.ts.net, then set
+# COOKIE_SECURE=true in .env.local. See the commented block at the bottom.
+
+services:
+  tailscale-portal:
+    image: tailscale/tailscale:latest
+    container_name: g5ar-tailscale
+    hostname: g5ar-portal # tailnet node name
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    # Optional LAN access. Must be declared here, not on the portal service,
+    # because the portal shares this container's network namespace.
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  g5ar-portal:
+    build: .
+    image: g5ar-portal
+    network_mode: service:tailscale-portal
+    env_file:
+      - .env.local
+    depends_on:
+      - tailscale-portal
+    restart: unless-stopped
+
+volumes:
+  tailscale-state:
+
+# ---------------------------------------------------------------------------
+# HTTPS over the tailnet (optional upgrade)
+# ---------------------------------------------------------------------------
+# If the kernel-mode setup above has trouble with /dev/net/tun on your host, or
+# you want automatic HTTPS, switch the sidecar to userspace networking + serve:
+#
+#   environment:
+#     - TS_AUTHKEY=${TS_AUTHKEY}
+#     - TS_STATE_DIR=/var/lib/tailscale
+#     - TS_USERSPACE=true
+#     - TS_SERVE_CONFIG=/config/serve.json
+#   volumes:
+#     - tailscale-state:/var/lib/tailscale
+#     - ./tailscale/serve.json:/config/serve.json:ro
+#   # remove the `devices:` and `cap_add:` blocks
+#
+# tailscale/serve.json:
+#   {
+#     "TCP": { "443": { "HTTPS": true } },
+#     "Web": {
+#       "${TS_CERT_DOMAIN}:443": {
+#         "Handlers": { "/": { "Proxy": "http://127.0.0.1:3000" } }
+#       }
+#     }
+#   }
+#
+# Then reach it at https://g5ar-portal.<your-tailnet>.ts.net and set
+# COOKIE_SECURE=true in .env.local.

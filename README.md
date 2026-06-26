@@ -136,30 +136,28 @@ Access the portal at [http://localhost:3000](http://localhost:3000).
 
 ### Docker Compose
 
-**Linux** (`docker-compose.yml`):
-```yaml
-services:
-  g5ar-portal:
-    build: .
-    network_mode: host
-    restart: unless-stopped
-```
+Two compose files are provided. Both read runtime config (gateway allowlist,
+optional Shodan key, cookie posture) from a gitignored `.env.local` — secrets
+never enter the image or git.
 
-**macOS/Windows** (`docker-compose.yml`):
-```yaml
-services:
-  g5ar-portal:
-    build: .
-    ports:
-      - "3000:3000"
-    restart: unless-stopped
-```
-
-Then run:
+**LAN-only** (`docker-compose.yml`) — reachable on your local network at
+`http://<host-ip>:3000`, not exposed to the internet:
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
+
+**Tailscale** (`docker-compose.tailscale.yml`) — runs a Tailscale sidecar so the
+portal becomes its own private node on your tailnet, reachable from anywhere you're
+signed into Tailscale (`http://g5ar-portal:3000`) with nothing published publicly.
+Add `TS_AUTHKEY=tskey-...` to `.env`, then:
+
+```bash
+docker compose -f docker-compose.tailscale.yml up -d --build
+```
+
+See the header comments in each file for details (including an optional HTTPS-over-
+tailnet setup via `tailscale serve`).
 
 ## Safe Deployment Notes
 
