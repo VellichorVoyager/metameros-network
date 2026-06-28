@@ -99,7 +99,7 @@ export function Sidebar({ collapsed = false, onCollapsedChange }: SidebarProps) 
             className="flex-shrink-0"
           />
           {!isCollapsed && (
-            <h1 className="font-bold text-lg text-white">G5AR Portal</h1>
+            <h1 className="font-bold text-lg text-white">Metameros Network</h1>
           )}
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 > Status: **Future / exploratory** · Last updated: 2026-06-26
 
-This captures the longer-term direction for evolving the G5AR Portal from a gateway
+This captures the longer-term direction for evolving Metameros Network from a gateway
 admin UI into a **network asset-discovery and baseline-monitoring** tool. It is a
 backlog of ideas, not a committed plan. The shipped WAN exposure feature
 ([docs/shodan-exposure.md](shodan-exposure.md)) is the first slice of this vision.

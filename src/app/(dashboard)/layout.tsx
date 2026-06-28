@@ -31,7 +31,7 @@ export default function DashboardLayout({
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
             <p>This project is open source and licensed under MIT.</p>
             <a
-              href="https://github.com/rchen14b/TMO-G5AR-Portal"
+              href="https://github.com/VellichorVoyager/metameros-network"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"

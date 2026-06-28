@@ -1,10 +1,10 @@
-# TMO-G5AR Portal
+# Metameros Network
 
-![Release](https://img.shields.io/github/v/release/VellichorVoyager/TMO-G5AR-Portal)
-![CodeQL](https://github.com/VellichorVoyager/TMO-G5AR-Portal/actions/workflows/codeql.yml/badge.svg)
-![License](https://img.shields.io/github/license/VellichorVoyager/TMO-G5AR-Portal)
+![Release](https://img.shields.io/github/v/release/VellichorVoyager/metameros-network)
+![CodeQL](https://github.com/VellichorVoyager/metameros-network/actions/workflows/codeql.yml/badge.svg)
+![License](https://img.shields.io/github/license/VellichorVoyager/metameros-network)
 
-A modern web admin interface for the T-Mobile Arcadyan G5AR 5G Gateway, built with Next.js and shadcn/ui.
+Metameros Network is a local-first admin and security console for the T-Mobile Arcadyan G5AR 5G gateway, built with Next.js and shadcn/ui.
 
 [![GitHub](https://img.shields.io/badge/GitHub-rchen14b-181717?style=flat&logo=github)](https://github.com/rchen14b/TMO-G5AR-Portal)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/rchen14b)
@@ -117,19 +117,19 @@ Make sure [Docker Desktop](https://www.docker.com/products/docker-desktop/) is i
 ### Build
 
 ```bash
-docker buildx build -t g5ar-portal .
+docker buildx build -t metameros-network .
 ```
 
 ### Run
 
 **Linux:**
 ```bash
-docker run --network host g5ar-portal
+docker run --network host metameros-network
 ```
 
 **macOS/Windows:** Docker Desktop doesn't support `--network host`. Use port mapping instead:
 ```bash
-docker run -p 3000:3000 g5ar-portal
+docker run -p 3000:3000 metameros-network
 ```
 
 Access the portal at [http://localhost:3000](http://localhost:3000).
@@ -149,7 +149,7 @@ docker compose up -d --build
 
 **Tailscale** (`docker-compose.tailscale.yml`) — runs a Tailscale sidecar so the
 portal becomes its own private node on your tailnet, reachable from anywhere you're
-signed into Tailscale (`http://g5ar-portal:3000`) with nothing published publicly.
+signed into Tailscale (`http://metameros-network:3000`) with nothing published publicly.
 Add `TS_AUTHKEY=tskey-...` to `.env`, then:
 
 ```bash

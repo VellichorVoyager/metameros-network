@@ -1,7 +1,8 @@
 {
-  "name": "tmo-g5ar-portal",
+  "name": "metameros-network",
   "version": "1.0.0",
   "private": true,
+  "description": "Local-first admin and security console for the Arcadyan G5AR 5G gateway.",
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",

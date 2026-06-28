@@ -1,10 +1,10 @@
-# Tailscale-attached deployment for the TMO-G5AR Portal.
+# Tailscale-attached deployment for Metameros Network.
 #
 # Runs a Tailscale sidecar and attaches the portal to its network namespace, so
 # the portal becomes its OWN node on your tailnet — reachable privately from any
 # of your Tailscale devices at:
 #
-#     http://g5ar-portal:3000          (if MagicDNS is on)
+#     http://metameros-network:3000    (if MagicDNS is on)
 #     http://<its-tailnet-100.x-IP>:3000
 #
 # Nothing is published to the public internet. The portal also stays reachable on
@@ -17,20 +17,20 @@
 #   2. Add it to .env  (compose reads .env for ${...}; it is gitignored):
 #        TS_AUTHKEY=tskey-auth-xxxxxxxxxxxx
 #   3. docker compose -f docker-compose.tailscale.yml up -d --build
-#   4. Verify the node appears in your Tailscale admin console as "g5ar-portal".
+#   4. Verify the node appears in your Tailscale admin console as "metameros-network".
 #
 # App config (Shodan key, gateway allowlist, cookie posture) still comes from the
 # gitignored .env.local via env_file on the portal service.
 #
 # HTTPS (optional): once this works over plain HTTP, you can switch to userspace
-# mode + `tailscale serve` to get https://g5ar-portal.<tailnet>.ts.net, then set
+# mode + `tailscale serve` to get https://metameros-network.<tailnet>.ts.net, then set
 # COOKIE_SECURE=true in .env.local. See the commented block at the bottom.
 
 services:
-  tailscale-portal:
+  metameros-tailscale:
     image: tailscale/tailscale:latest
-    container_name: g5ar-tailscale
-    hostname: g5ar-portal # tailnet node name
+    container_name: metameros-tailscale
+    hostname: metameros-network # tailnet node name
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
       - TS_STATE_DIR=/var/lib/tailscale
@@ -47,14 +47,14 @@ services:
       - "3000:3000"
     restart: unless-stopped
 
-  g5ar-portal:
+  metameros-network:
     build: .
-    image: g5ar-portal
-    network_mode: service:tailscale-portal
+    image: metameros-network
+    network_mode: service:metameros-tailscale
     env_file:
       - .env.local
     depends_on:
-      - tailscale-portal
+      - metameros-tailscale
     restart: unless-stopped
 
 volumes:
@@ -86,5 +86,5 @@ volumes:
 #     }
 #   }
 #
-# Then reach it at https://g5ar-portal.<your-tailnet>.ts.net and set
+# Then reach it at https://metameros-network.<your-tailnet>.ts.net and set
 # COOKIE_SECURE=true in .env.local.

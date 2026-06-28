@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "G5AR Portal - 5G Gateway Manager",
-  description: "Modern web admin interface for Arcadyan G5AR 5G Gateway",
+  title: "Metameros Network — 5G Gateway Manager",
+  description: "Local-first admin and security console for the Arcadyan G5AR 5G gateway",
   icons: {
     icon: "/logo.svg",
     apple: "/logo.svg",

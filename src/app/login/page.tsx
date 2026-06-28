@@ -101,7 +101,7 @@ export default function LoginPage() {
               height={48}
             />
             <div>
-              <h1 className="text-2xl font-bold">G5AR Portal</h1>
+              <h1 className="text-2xl font-bold">Metameros Network</h1>
               <p className="text-muted-foreground">T-Mobile Gateway Administration</p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap tracks planned improvements for the TMO-G5AR Portal fork, with a focus on safe local administration, security hardening, reliability, and better operational visibility.
+This roadmap tracks planned improvements for Metameros Network, with a focus on safe local administration, security hardening, reliability, and better operational visibility.
 
 ## Near Term
 

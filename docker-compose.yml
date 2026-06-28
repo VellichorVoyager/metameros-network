@@ -1,4 +1,4 @@
-# LAN-only deployment for the TMO-G5AR Portal.
+# LAN-only deployment for Metameros Network.
 #
 # Runs the portal on an always-on host on your home network. Reachable from any
 # device on the LAN at  http://<this-host-LAN-IP>:3000  — and NOT from the
@@ -17,9 +17,9 @@
 # and the container still has outbound access to the gateway at 192.168.12.1.
 
 services:
-  g5ar-portal:
+  metameros-network:
     build: .
-    image: g5ar-portal
+    image: metameros-network
     # Binds 3000 on the host (all interfaces) so other LAN devices can reach it.
     # To restrict to this machine only, change to "127.0.0.1:3000:3000".
     ports:

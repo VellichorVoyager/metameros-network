@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
   const body = (await request.json().catch(() => ({}))) as { ip?: string; name?: string }
   const ip = body.ip?.trim()
-  const name = body.name?.trim() || `G5AR Portal — ${ip}`
+  const name = body.name?.trim() || `Metameros Network — ${ip}`
 
   if (!ip || !isValidIpv4(ip)) {
     return NextResponse.json({ error: "A valid IPv4 address is required" }, { status: 400 })
